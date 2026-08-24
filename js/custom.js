@@ -58,7 +58,7 @@
           const thumbnail = entry.target;
           const bounds = thumbnail.getBoundingClientRect();
           const nearViewport = bounds.bottom >= -160 && bounds.top <= window.innerHeight + 160;
-          if (!isConstrainedDevice && entry.isIntersecting && nearViewport) {
+          if (entry.isIntersecting && nearViewport) {
             if (activeThumbnail && activeThumbnail !== thumbnail) {
               unloadThumbnail(activeThumbnail);
             }
@@ -90,7 +90,7 @@
       thumbnail.muted = true;
       thumbnail.loop = true;
       thumbnail.playsInline = true;
-      thumbnail.preload = 'none';
+      thumbnail.preload = 'metadata';
       thumbnail.setAttribute('aria-label', fileName);
       thumbnail.dataset.src = `videos/${encodeURIComponent(fileName)}`;
       thumbnail.addEventListener('click', () => {
@@ -105,11 +105,9 @@
         }
       });
       thumbnailGrid.appendChild(thumbnail);
-      if (thumbnailObserver) {
-        thumbnailObserver.observe(thumbnail);
-      } else if (!isConstrainedDevice) {
-        thumbnail.src = thumbnail.dataset.src;
-      }
+      // Load video immediately
+      thumbnail.src = thumbnail.dataset.src;
+      thumbnail.load();
     });
 
     const mainVideo = document.getElementById('randomVideo1');
@@ -146,6 +144,7 @@
       mainVideo.addEventListener('ended', () => playRandomVideo(mainVideo.dataset.fileName, false));
       const initialFileName = videoFiles[Math.floor(Math.random() * videoFiles.length)];
       mainVideo.dataset.fileName = initialFileName;
+      playVideo(initialFileName, false, false);
     }
   }
 
