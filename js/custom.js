@@ -15,8 +15,7 @@
 
   function playVideo(fileName, userInitiated) {
     const video = document.getElementById('randomVideo1');
-    const videoSource = document.getElementById('videoSource1');
-    if (!video || !videoSource) return;
+    if (!video) return;
 
     video.dataset.fileName = fileName;
     video.style.display = 'block';
@@ -25,7 +24,7 @@
       video.currentTime = 0;
       video.play().catch(() => {});
     };
-    videoSource.src = `videos/${encodeURIComponent(fileName)}`;
+    video.src = `videos/${encodeURIComponent(fileName)}`;
     video.load();
   }
 
