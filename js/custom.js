@@ -13,85 +13,60 @@
     'the metropole.mp4', 'the rat.mp4', 'the shunning.mp4', 'theeggman.mp4',
   ];
 
-  let soundEnabled = false;
+  function playVideo(fileName, userInitiated) {
+    const video = document.getElementById('randomVideo1');
+    const videoSource = document.getElementById('videoSource1');
+    if (!video || !videoSource) return;
 
-  function showRandomVideo(videoId, videoSourceId) {
-    const changeSound = document.getElementById('changeSound');
-
-    function show() {
-      if (changeSound && soundEnabled) {
-        changeSound.currentTime = 0;
-        changeSound.play().catch(() => {});
-      }
-
-      const randomIndex = Math.floor(Math.random() * videoFiles.length);
-      const video = document.getElementById(videoId);
-      const videoSource = document.getElementById(videoSourceId);
-
-      if (!video || !videoSource) return;
-
-      videoSource.src = `videos/${encodeURIComponent(videoFiles[randomIndex])}`;
-      video.style.display = '';
-      video.load();
-      video.onloadedmetadata = function () {
-        if (video.duration && !isNaN(video.duration)) {
-          video.currentTime = Math.random() * video.duration;
-        }
-        video.muted = false;
-        video.play().catch(() => {});
-      }
-
-      const nextTime = (Math.floor(Math.random() * 33 + 6)) * 1000;
-      setTimeout(show, nextTime);
-    }
-
-    show();
+    videoSource.src = `videos/${encodeURIComponent(fileName)}`;
+    video.dataset.fileName = fileName;
+    video.style.display = 'block';
+    video.muted = !userInitiated;
+    video.load();
+    video.onloadedmetadata = function () {
+      video.currentTime = 0;
+      video.play().catch(() => {});
+    };
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
-    const playButton = document.getElementById('playButton');
-    if (!playButton) return;
+  function playRandomVideo(previousFileName, userInitiated) {
+    const availableFiles = videoFiles.filter((fileName) => fileName !== previousFileName);
+    const randomIndex = Math.floor(Math.random() * availableFiles.length);
+    playVideo(availableFiles[randomIndex], userInitiated);
+  }
 
-    let armed = false;
+  function buildVideoThumbnails() {
+    const thumbnailGrid = document.getElementById('videoThumbnails');
+    if (!thumbnailGrid) return;
 
-    function moveButtonRandomly() {
-      const parent = playButton.offsetParent || document.body;
-      const parentRect = parent.getBoundingClientRect();
-      const btnRect = playButton.getBoundingClientRect();
-      const maxX = parentRect.width - btnRect.width;
-      const maxY = parentRect.height - btnRect.height;
-      const randX = Math.random() * maxX;
-      const randY = Math.random() * maxY;
-      playButton.style.left = randX + 'px';
-      playButton.style.top = randY + 'px';
-      playButton.style.transform = 'translate(0,0)';
-    }
-
-    playButton.addEventListener('mouseenter', moveButtonRandomly);
-    playButton.addEventListener('click', function () {
-      moveButtonRandomly();
-
-      if (!armed) {
-        armed = true;
-        playButton.classList.add('armed-green');
-        console.log('[playButton] armed - click again to play');
-        return;
-      }
-
-      console.log('[playButton] second click - playing');
-      const changeSound = document.getElementById('changeSound');
-      soundEnabled = true;
-      if (changeSound) {
-        changeSound.currentTime = 0;
-        changeSound.play().catch(() => {});
-      }
-
-      setTimeout(() => {
-        playButton.style.display = 'none';
-        showRandomVideo('randomVideo1', 'videoSource1');
-      }, 300);
+    videoFiles.forEach((fileName) => {
+      const thumbnail = document.createElement('video');
+      thumbnail.className = 'video-thumbnail';
+      thumbnail.src = `videos/${encodeURIComponent(fileName)}`;
+      thumbnail.muted = true;
+      thumbnail.loop = true;
+      thumbnail.autoplay = true;
+      thumbnail.playsInline = true;
+      thumbnail.preload = 'metadata';
+      thumbnail.setAttribute('aria-label', fileName);
+      thumbnail.addEventListener('click', () => playVideo(fileName, true));
+      thumbnail.addEventListener('loadedmetadata', () => {
+        if (thumbnail.duration && !isNaN(thumbnail.duration)) {
+          thumbnail.currentTime = Math.random() * thumbnail.duration;
+        }
+        thumbnail.play().catch(() => {});
+      });
+      thumbnailGrid.appendChild(thumbnail);
     });
-  });
+
+    const mainVideo = document.getElementById('randomVideo1');
+    if (mainVideo) {
+      mainVideo.addEventListener('ended', () => playRandomVideo(mainVideo.dataset.fileName, false));
+      playRandomVideo(null, false);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', buildVideoThumbnails);
 
   document.addEventListener('DOMContentLoaded', function () {
     const contactForm = document.getElementById('contactForm');

@@ -1,14 +1,5 @@
-.play-button img {
-  transition: filter 0.2s;
-}
-
-.play-button:hover img {
-  filter: hue-rotate(120deg) brightness(1.3) saturate(1.8);
-}
-
 body {
-  background: #000000 url('../img/btrec.png') no-repeat center center fixed;
-  background-size: cover;
+  background: #000000;
   color: #ffffff;
   text-shadow: none;
   font-family: "Rubik", "Trebuchet MS", sans-serif;
@@ -16,77 +7,59 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
-.play-button {
-  border-radius: 12px;
-  background: repeating-linear-gradient(135deg, #FFD600 0 20px, #000 20px 40px);
-  color: #000;
-  font-size: 2rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  padding: 1.5rem 4rem;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  text-transform: uppercase;
-  border: 4px solid #000;
-  box-shadow: 0 0 0 6px #FFD600, 0 8px 32px rgba(0,0,0,0.25);
-  z-index: 10002;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 0.2s cubic-bezier(.4,2,.6,1), box-shadow 0.2s, background 0.2s, padding 0.25s ease;
-  user-select: none;
+.container-fluid,
+.container {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
 }
 
-.play-button:hover {
-  background: repeating-linear-gradient(135deg, #FFD600 0 20px, #222 20px 40px);
-  box-shadow: 0 0 0 8px #FFD600, 0 16px 48px rgba(0,0,0,0.35);
-  transform: translate(-50%, -50%) scale(1.07) rotate(-2deg);
+.container > .row,
+.container-fluid > .row {
+  margin-left: 0;
+  margin-right: 0;
 }
 
-.play-button:active {
-  background: #FFD600;
-  color: #000;
-  box-shadow: 0 0 0 4px #FFD600, 0 4px 16px rgba(0,0,0,0.18);
-  transform: translate(-50%, -50%) scale(0.97) rotate(1deg);
+.video-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.35rem;
+  margin-top: 1rem;
+  max-width: none;
+  width: 100%;
 }
 
-#movingButtonText {
-  font-family: inherit;
-  font-size: 2.1rem;
-  font-weight: 900;
-  color: #000;
-  text-shadow: 2px 2px 0 #FFD600, 0 2px 0 #000, 2px 0 0 #000;
-  letter-spacing: 0.08em;
-  pointer-events: none;
+.mediaScreen {
+  aspect-ratio: 16 / 9;
+  background: #111;
+  max-width: 100vw;
+  width: 100%;
 }
 
-/* Armed (post first-click) state: yellow stripe -> green stripe, bigger rectangle */
-#playButton.armed-green {
-  background: repeating-linear-gradient(135deg, #2ecc71 0 20px, #000 20px 40px);
-  box-shadow: 0 0 0 6px #2ecc71, 0 8px 32px rgba(0,0,0,0.25);
-  padding: 2.5rem 6rem;
-  border-radius: 8px;
+#randomVideo1 {
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
 }
 
-#playButton.armed-green:hover {
-  background: repeating-linear-gradient(135deg, #2ecc71 0 20px, #222 20px 40px);
-  box-shadow: 0 0 0 8px #2ecc71, 0 16px 48px rgba(0,0,0,0.35);
-  transform: translate(-50%, -50%) scale(1.07) rotate(-2deg);
+.video-thumbnail {
+  aspect-ratio: 4 / 3;
+  background: #111;
+  border: 2px solid #FFD600;
+  display: block;
+  object-fit: cover;
+  overflow: hidden;
+  width: 100%;
 }
 
-#playButton.armed-green:active {
-  background: #2ecc71;
-  box-shadow: 0 0 0 4px #2ecc71, 0 4px 16px rgba(0,0,0,0.18);
-  transform: translate(-50%, -50%) scale(0.97) rotate(1deg);
-}
-
-#playButton.armed-green #movingButtonText {
-  text-shadow: 2px 2px 0 #2ecc71, 0 2px 0 #000, 2px 0 0 #000;
+@media (max-width: 576px) {
+  .video-thumbnails {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
 }
 
 .about-card {

@@ -11,14 +11,6 @@
     <link rel="stylesheet" href="css/styles.css">
 
 
-    <style>
-      @media (max-width: 576px) {
-        #playButton {
-          font-size: 1rem;
-          padding: 0.8rem 1.6rem;
-        }
-      }
-    </style>
   </head>
   <body>
 
@@ -27,24 +19,17 @@
         <h1 id="home">smoothlad </h1>
         <h3>smooth world oracle</h3>
         
-        <div id="mediaArea" class="row justify-content-center align-items-center mt-5" style="position:relative; z-index:10000;">
-            <div class="col-md-6 mx-auto d-flex flex-column justify-content-center align-items-center" style="position:relative; z-index:10000;">
-                <div class="mediaScreen text-center" style="position:relative; width:480px; height:360px; z-index:10000;">
-                    
-                    <button id="playButton" class="play-button" aria-label="Play">
-                      <span id="movingButtonText">PLAY</span>
-                    </button>
-
-
-
-
-                    <video id="randomVideo1" autoplay loop playsinline width="480" height="360" style="display:none; position:absolute; left:50%; top:50%; transform:translate(-50%,-40%); z-index:10001;">
+        <div id="mediaArea" class="row align-items-center mt-2" style="position:relative; z-index:10000;">
+            <div class="col-12 d-flex flex-column align-items-center" style="position:relative; z-index:10000;">
+                <div class="mediaScreen text-center" style="position:relative; z-index:10000;">
+                    <video id="randomVideo1" playsinline style="display:none;">
                       <source id="videoSource1" src="" type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
                 </div>
                 <div class="mt-1">
                 </div>
+                <div id="videoThumbnails" class="video-thumbnails" aria-label="Video previews"></div>
             </div>
         </div>
 
@@ -72,7 +57,6 @@
 
 
 
-        <audio id="changeSound" src="audio/change.mp3" preload="auto"></audio>
     </div>
 
     <script type="module" src="js/custom.js" defer></script>
