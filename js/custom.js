@@ -41,6 +41,23 @@
     const thumbnailGrid = document.getElementById('videoThumbnails');
     if (!thumbnailGrid) return;
 
+    const thumbnailObserver = 'IntersectionObserver' in window
+      ? new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const thumbnail = entry.target;
+          const bounds = thumbnail.getBoundingClientRect();
+          const nearViewport = bounds.bottom >= -160 && bounds.top <= window.innerHeight + 160;
+          if (entry.isIntersecting && nearViewport) {
+            thumbnail.src = thumbnail.dataset.src;
+            thumbnail.load();
+            thumbnail.play().catch(() => {});
+          } else {
+            thumbnail.pause();
+          }
+        });
+      }, { rootMargin: '160px 0px' })
+      : null;
+
       const enableVideoAudio = () => {
         videoAudioEnabled = true;
         const mainVideo = document.getElementById('randomVideo1');
@@ -57,19 +74,25 @@
       thumbnail.className = 'video-thumbnail';
       thumbnail.muted = true;
       thumbnail.loop = true;
-      thumbnail.autoplay = true;
       thumbnail.playsInline = true;
-      thumbnail.preload = 'metadata';
+      thumbnail.preload = 'none';
       thumbnail.setAttribute('aria-label', fileName);
-      thumbnail.addEventListener('click', () => playVideo(fileName, true));
+      thumbnail.dataset.src = `videos/${encodeURIComponent(fileName)}`;
+      thumbnail.addEventListener('click', () => {
+        playVideo(fileName, true);
+      });
       thumbnail.addEventListener('loadedmetadata', () => {
         if (thumbnail.duration && !isNaN(thumbnail.duration)) {
           thumbnail.currentTime = Math.random() * thumbnail.duration;
         }
         thumbnail.play().catch(() => {});
       });
-      thumbnail.src = `videos/${encodeURIComponent(fileName)}`;
       thumbnailGrid.appendChild(thumbnail);
+      if (thumbnailObserver) {
+        thumbnailObserver.observe(thumbnail);
+      } else {
+        thumbnail.src = thumbnail.dataset.src;
+      }
     });
 
     const mainVideo = document.getElementById('randomVideo1');
