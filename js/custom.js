@@ -12,31 +12,44 @@
     'space paladin (visualiser).mp4', 'standing outside the offie.mp4', 'tech lad.mp4',
     'the metropole.mp4', 'the rat.mp4', 'the shunning.mp4', 'theeggman.mp4',
   ];
+    let videoAudioEnabled = false;
 
-  function playVideo(fileName, userInitiated) {
+  function playVideo(fileName, userInitiated, startPlayback = true) {
     const video = document.getElementById('randomVideo1');
     if (!video) return;
 
     video.dataset.fileName = fileName;
     video.style.display = 'block';
-    video.muted = !userInitiated;
+    video.muted = false;
     video.onloadedmetadata = function () {
       video.currentTime = 0;
-      video.play().catch(() => {});
+      if (startPlayback) {
+        video.play().catch(() => {});
+      }
     };
     video.src = `videos/${encodeURIComponent(fileName)}`;
     video.load();
   }
 
-  function playRandomVideo(previousFileName, userInitiated) {
+  function playRandomVideo(previousFileName, userInitiated, startPlayback = true) {
     const availableFiles = videoFiles.filter((fileName) => fileName !== previousFileName);
     const randomIndex = Math.floor(Math.random() * availableFiles.length);
-    playVideo(availableFiles[randomIndex], userInitiated);
+    playVideo(availableFiles[randomIndex], userInitiated, startPlayback);
   }
 
   function buildVideoThumbnails() {
     const thumbnailGrid = document.getElementById('videoThumbnails');
     if (!thumbnailGrid) return;
+
+      const enableVideoAudio = () => {
+        videoAudioEnabled = true;
+        const mainVideo = document.getElementById('randomVideo1');
+        if (mainVideo) {
+          mainVideo.muted = false;
+        }
+      };
+      document.addEventListener('pointerdown', enableVideoAudio, { once: true });
+      document.addEventListener('keydown', enableVideoAudio, { once: true });
 
     videoFiles.forEach((fileName) => {
       const thumbnail = document.createElement('video');
@@ -60,8 +73,23 @@
 
     const mainVideo = document.getElementById('randomVideo1');
     if (mainVideo) {
+      const playbackIndicator = document.getElementById('videoPlaybackIndicator');
+      mainVideo.addEventListener('click', () => {
+        const wasPaused = mainVideo.paused;
+        if (wasPaused) {
+          mainVideo.play().catch(() => {});
+        } else {
+          mainVideo.pause();
+        }
+        if (playbackIndicator) {
+          playbackIndicator.textContent = wasPaused ? 'Play' : 'Pause';
+          playbackIndicator.classList.remove('is-visible');
+          void playbackIndicator.offsetWidth;
+          playbackIndicator.classList.add('is-visible');
+        }
+      });
       mainVideo.addEventListener('ended', () => playRandomVideo(mainVideo.dataset.fileName, false));
-      playRandomVideo(null, false);
+      playRandomVideo(null, false, false);
     }
   }
 
