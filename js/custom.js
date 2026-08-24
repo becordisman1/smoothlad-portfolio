@@ -18,15 +18,15 @@
     const videoSource = document.getElementById('videoSource1');
     if (!video || !videoSource) return;
 
-    videoSource.src = `videos/${encodeURIComponent(fileName)}`;
     video.dataset.fileName = fileName;
     video.style.display = 'block';
     video.muted = !userInitiated;
-    video.load();
     video.onloadedmetadata = function () {
       video.currentTime = 0;
       video.play().catch(() => {});
     };
+    videoSource.src = `videos/${encodeURIComponent(fileName)}`;
+    video.load();
   }
 
   function playRandomVideo(previousFileName, userInitiated) {
@@ -42,7 +42,6 @@
     videoFiles.forEach((fileName) => {
       const thumbnail = document.createElement('video');
       thumbnail.className = 'video-thumbnail';
-      thumbnail.src = `videos/${encodeURIComponent(fileName)}`;
       thumbnail.muted = true;
       thumbnail.loop = true;
       thumbnail.autoplay = true;
@@ -56,6 +55,7 @@
         }
         thumbnail.play().catch(() => {});
       });
+      thumbnail.src = `videos/${encodeURIComponent(fileName)}`;
       thumbnailGrid.appendChild(thumbnail);
     });
 
