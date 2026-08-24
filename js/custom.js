@@ -89,19 +89,18 @@
           playbackIndicator.classList.add('is-visible');
         }
       };
-      let touchHandled = false;
+      let pointerHandled = false;
       mainVideo.addEventListener('click', () => {
-        if (touchHandled) {
-          touchHandled = false;
+        if (pointerHandled) {
+          pointerHandled = false;
           return;
         }
         toggleMainVideo();
       });
-      mainVideo.addEventListener('touchend', (event) => {
-        event.preventDefault();
-        touchHandled = true;
+      mainVideo.addEventListener('pointerup', () => {
+        pointerHandled = true;
         toggleMainVideo();
-      }, { passive: false });
+      });
       mainVideo.addEventListener('ended', () => playRandomVideo(mainVideo.dataset.fileName, false));
       playRandomVideo(null, false, false);
     }
