@@ -13,6 +13,7 @@
     'the metropole.mp4', 'the rat.mp4', 'the shunning.mp4', 'theeggman.mp4',
   ];
     let videoAudioEnabled = false;
+    let activeThumbnail = null;
 
   function playVideo(fileName, userInitiated, startPlayback = true) {
     const video = document.getElementById('randomVideo1');
@@ -40,6 +41,16 @@
   function buildVideoThumbnails() {
     const thumbnailGrid = document.getElementById('videoThumbnails');
     if (!thumbnailGrid) return;
+    const isConstrainedDevice = window.matchMedia('(max-width: 576px), (prefers-reduced-data: reduce)').matches;
+
+    const unloadThumbnail = (thumbnail) => {
+      thumbnail.pause();
+      thumbnail.removeAttribute('src');
+      thumbnail.load();
+      if (activeThumbnail === thumbnail) {
+        activeThumbnail = null;
+      }
+    };
 
     const thumbnailObserver = 'IntersectionObserver' in window
       ? new IntersectionObserver((entries) => {
@@ -47,12 +58,16 @@
           const thumbnail = entry.target;
           const bounds = thumbnail.getBoundingClientRect();
           const nearViewport = bounds.bottom >= -160 && bounds.top <= window.innerHeight + 160;
-          if (entry.isIntersecting && nearViewport) {
+          if (!isConstrainedDevice && entry.isIntersecting && nearViewport) {
+            if (activeThumbnail && activeThumbnail !== thumbnail) {
+              unloadThumbnail(activeThumbnail);
+            }
+            activeThumbnail = thumbnail;
             thumbnail.src = thumbnail.dataset.src;
             thumbnail.load();
             thumbnail.play().catch(() => {});
           } else {
-            thumbnail.pause();
+            unloadThumbnail(thumbnail);
           }
         });
       }, { rootMargin: '160px 0px' })
@@ -85,12 +100,14 @@
         if (thumbnail.duration && !isNaN(thumbnail.duration)) {
           thumbnail.currentTime = Math.random() * thumbnail.duration;
         }
-        thumbnail.play().catch(() => {});
+        if (activeThumbnail === thumbnail) {
+          thumbnail.play().catch(() => {});
+        }
       });
       thumbnailGrid.appendChild(thumbnail);
       if (thumbnailObserver) {
         thumbnailObserver.observe(thumbnail);
-      } else {
+      } else if (!isConstrainedDevice) {
         thumbnail.src = thumbnail.dataset.src;
       }
     });
@@ -100,7 +117,9 @@
       const playbackIndicator = document.getElementById('videoPlaybackIndicator');
       const toggleMainVideo = () => {
         const wasPaused = mainVideo.paused;
-        if (wasPaused) {
+        if (wasPaused && !mainVideo.src) {
+          playVideo(mainVideo.dataset.fileName, true);
+        } else if (wasPaused) {
           mainVideo.play().catch(() => {});
         } else {
           mainVideo.pause();
@@ -125,7 +144,8 @@
         toggleMainVideo();
       });
       mainVideo.addEventListener('ended', () => playRandomVideo(mainVideo.dataset.fileName, false));
-      playRandomVideo(null, false, false);
+      const initialFileName = videoFiles[Math.floor(Math.random() * videoFiles.length)];
+      mainVideo.dataset.fileName = initialFileName;
     }
   }
 
