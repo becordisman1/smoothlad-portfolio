@@ -75,7 +75,7 @@
     const mainVideo = document.getElementById('randomVideo1');
     if (mainVideo) {
       const playbackIndicator = document.getElementById('videoPlaybackIndicator');
-      mainVideo.addEventListener('click', () => {
+      const toggleMainVideo = () => {
         const wasPaused = mainVideo.paused;
         if (wasPaused) {
           mainVideo.play().catch(() => {});
@@ -88,7 +88,20 @@
           void playbackIndicator.offsetWidth;
           playbackIndicator.classList.add('is-visible');
         }
+      };
+      let touchHandled = false;
+      mainVideo.addEventListener('click', () => {
+        if (touchHandled) {
+          touchHandled = false;
+          return;
+        }
+        toggleMainVideo();
       });
+      mainVideo.addEventListener('touchend', (event) => {
+        event.preventDefault();
+        touchHandled = true;
+        toggleMainVideo();
+      }, { passive: false });
       mainVideo.addEventListener('ended', () => playRandomVideo(mainVideo.dataset.fileName, false));
       playRandomVideo(null, false, false);
     }
