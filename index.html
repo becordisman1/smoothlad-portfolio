@@ -18,15 +18,6 @@
           padding: 0.8rem 1.6rem;
         }
       }
-      .mediaScreen iframe {
-        position: absolute !important;
-        left: 50% !important;
-        top: 50% !important;
-        transform: translate(-50%, -50%) !important;
-        z-index: 10001 !important;
-        width: 480px !important;
-        height: 360px !important;
-      }
     </style>
   </head>
   <body>
@@ -40,8 +31,6 @@
             <div class="col-md-6 mx-auto d-flex flex-column justify-content-center align-items-center" style="position:relative; z-index:10000;">
                 <div class="mediaScreen text-center" style="position:relative; width:480px; height:360px; z-index:10000;">
                     
-                    <img id="buttonOverlay" src="https://media.giphy.com/media/5kcTeDZmTTAJnou50r/giphy.gif" alt="" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:100%;height:100%;object-fit:contain;z-index:10005;pointer-events:none;opacity:0;">
-                    
                     <button id="playButton" class="play-button" aria-label="Play">
                       <span id="movingButtonText">PLAY</span>
                     </button>
@@ -49,7 +38,6 @@
 
 
 
-                    <img id="randomImage1" src="" alt="Random" style="display:none; max-width:100%; max-height:100%; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:10001; pointer-events:none;" />
                     <video id="randomVideo1" autoplay loop playsinline width="480" height="360" style="display:none; position:absolute; left:50%; top:50%; transform:translate(-50%,-40%); z-index:10001;">
                       <source id="videoSource1" src="" type="video/mp4" />
                       Your browser does not support the video tag.
