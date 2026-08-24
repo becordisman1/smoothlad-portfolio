@@ -13,7 +13,6 @@
     'the metropole.mp4', 'the rat.mp4', 'the shunning.mp4', 'theeggman.mp4',
   ];
     let videoAudioEnabled = false;
-      document.addEventListener('touchstart', enableVideoAudio, { once: true, passive: true });
 
   function playVideo(fileName, userInitiated, startPlayback = true) {
     const video = document.getElementById('randomVideo1');
@@ -50,6 +49,7 @@
         }
       };
       document.addEventListener('pointerdown', enableVideoAudio, { once: true });
+      document.addEventListener('touchstart', enableVideoAudio, { once: true, passive: true });
       document.addEventListener('keydown', enableVideoAudio, { once: true });
 
     videoFiles.forEach((fileName) => {
