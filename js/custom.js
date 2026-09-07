@@ -2,7 +2,7 @@
   'use strict';
 
   const videoFiles = [
-    'A slice of life.mp4', 'Bastards of avarice.mp4', 'Benzo day, afternoon.mp4',
+    'A slice of life.mp4', 'Bastards of avarice.mp4', 'benzo day after.mp4',
     'Chaste C****....mp4', 'Cosmic orphan (live action).mp4', 'Dev log.mp4',
     'Do me a jest.mp4', 'Galactic ball infographic.mp4', 'Lusty ken.mp4',
     'Stick the CR.mp4', 'Tenerife 256.mp4', 'The cloud.mp4', 'The lad....mp4',
