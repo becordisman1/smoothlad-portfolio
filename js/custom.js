@@ -11,7 +11,7 @@
     'jerry b - local housing authority adventures.mp4', 'pamphlet knight (visualiser).mp4',
     'round the clock business chat.mp4', 'smoothworld-takeover.mp4', 'smoothworld.mp4',
     'space paladin (visualiser).mp4', 'standing outside the offie.mp4', 'tech lad.mp4',
-    'the metropole.mp4', 'the rat.mp4', 'the shunning.mp4', 'theeggman.mp4'
+    'the metropole.mp4', 'the rat.mp4', 'the shunning.mp4', 'theeggman.mp4', 'sam smith dub.mp4'
   ];
     let videoAudioEnabled = false;
     let activeThumbnail = null;
